@@ -20,6 +20,10 @@ class Apply
     #[ORM\JoinColumn(nullable: false)]
     private ?Candidat $candidat = null;
 
+    #[ORM\ManyToOne(targetEntity: JobOffer::class, inversedBy: 'Applies')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?JobOffer $jobOffer = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +49,18 @@ class Apply
     public function setCandidat(?Candidat $candidat): static
     {
         $this->candidat = $candidat;
+
+        return $this;
+    }
+
+    public function getJobOffer(): ?JobOffer
+    {
+        return $this->jobOffer;
+    }
+
+    public function setJobOffer(?JobOffer $jobOffer): static
+    {
+        $this->jobOffer = $jobOffer;
 
         return $this;
     }

@@ -32,9 +32,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Candidat::class)]
     private Collection $Candidats;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Recruiter::class)]
+    private Collection $Recruiters;
+
     public function __construct()
     {
         $this->Candidats = new ArrayCollection();
+        $this->Recruiters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -131,6 +135,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($candidat->getUser() === $this) {
                 $candidat->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Recruiter>
+     */
+    public function getRecruiters(): Collection
+    {
+        return $this->Recruiters;
+    }
+
+    public function addRecruiter(Recruiter $recruiter): static
+    {
+        if (!$this->Recruiters->contains($recruiter)) {
+            $this->Recruiters->add($recruiter);
+            $recruiter->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecruiter(Recruiter $recruiter): static
+    {
+        if ($this->Recruiters->removeElement($recruiter)) {
+            // set the owning side to null (unless already changed)
+            if ($recruiter->getUser() === $this) {
+                $recruiter->setUser(null);
             }
         }
 

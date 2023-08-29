@@ -25,6 +25,9 @@ class Candidat
     #[ORM\Column(nullable: true)]
     private ?bool $isValidated = null;
 
+    #[ORM\ManyToOne(inversedBy: 'Candidats')]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,18 @@ class Candidat
     public function setIsValidated(?bool $isValidated): static
     {
         $this->isValidated = $isValidated;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

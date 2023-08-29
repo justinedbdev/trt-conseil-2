@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -26,6 +28,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Candidat::class)]
+    private Collection $Candidats;
+
+    public function __construct()
+    {
+        $this->Candidats = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -95,5 +105,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Candidat>
+     */
+    public function getCandidat(): Collection
+    {
+        return $this->Candidats;
+    }
+
+    public function addCandidat(Candidat $candidat): static
+    {
+        if (!$this->Candidats->contains($candidat)) {
+            $this->Candidats->add($candidat);
+            $candidat->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCandidat(Candidat $candidat): static
+    {
+        if ($this->Candidats->removeElement($candidat)) {
+            // set the owning side to null (unless already changed)
+            if ($candidat->getUser() === $this) {
+                $candidat->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\RecruiterRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RecruiterRepository::class)]
@@ -24,6 +26,14 @@ class Recruiter
 
     #[ORM\ManyToOne(inversedBy: 'Recruiters')]
     private ?User $user = null;
+
+    #[ORM\OneToMany(mappedBy: 'recruiter', targetEntity: jobOffer::class, orphanRemoval: true)]
+    private Collection $jobOffers;
+
+    public function __construct()
+    {
+        $this->jobOffers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -74,6 +84,36 @@ class Recruiter
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, jobOffer>
+     */
+    public function getJobOffers(): Collection
+    {
+        return $this->jobOffers;
+    }
+
+    public function addJobOffer(jobOffer $jobOffer): static
+    {
+        if (!$this->jobOffers->contains($jobOffer)) {
+            $this->jobOffers->add($jobOffer);
+            $jobOffer->setRecruiter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeJobOffer(jobOffer $jobOffer): static
+    {
+        if ($this->jobOffers->removeElement($jobOffer)) {
+            // set the owning side to null (unless already changed)
+            if ($jobOffer->getRecruiter() === $this) {
+                $jobOffer->setRecruiter(null);
+            }
+        }
 
         return $this;
     }

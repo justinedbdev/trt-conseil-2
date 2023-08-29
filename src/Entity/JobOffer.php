@@ -26,6 +26,10 @@ class JobOffer
     #[ORM\Column(nullable: true)]
     private ?bool $isValidated = null;
 
+    #[ORM\ManyToOne(inversedBy: 'jobOffers')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Recruiter $recruiter = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +79,18 @@ class JobOffer
     public function setIsValidated(?bool $isValidated): static
     {
         $this->isValidated = $isValidated;
+
+        return $this;
+    }
+
+    public function getRecruiter(): ?Recruiter
+    {
+        return $this->recruiter;
+    }
+
+    public function setRecruiter(?Recruiter $recruiter): static
+    {
+        $this->recruiter = $recruiter;
 
         return $this;
     }

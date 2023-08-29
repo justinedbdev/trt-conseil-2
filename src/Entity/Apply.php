@@ -16,6 +16,10 @@ class Apply
     #[ORM\Column(nullable: true)]
     private ?bool $isValidated = null;
 
+    #[ORM\ManyToOne(targetEntity: Candidat::class, inversedBy: 'applies')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Candidat $candidat = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -29,6 +33,18 @@ class Apply
     public function setIsValidated(?bool $isValidated): static
     {
         $this->isValidated = $isValidated;
+
+        return $this;
+    }
+
+    public function getCandidat(): ?Candidat
+    {
+        return $this->candidat;
+    }
+
+    public function setCandidat(?Candidat $candidat): static
+    {
+        $this->candidat = $candidat;
 
         return $this;
     }

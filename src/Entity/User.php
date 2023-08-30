@@ -119,7 +119,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @return Collection<int, Candidat>
      */
-    public function getCandidat(): Collection
+    public function getCandidats(): Collection
     {
         return $this->Candidats;
     }

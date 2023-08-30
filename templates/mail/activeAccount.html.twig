@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body>
+		<h1>Activation de votre compte</h1>
+		<p>
+			Bonjour
+			{{ user.email }}
+			<br><br>
+			Votre demande de création de compte a été approuvée.
+			<br><br>
+			Une dernière étape est nécessaire pour avoir accès à votre profil, vous devez valider votre compte en cliquant sur le lien ci-dessous.
+			<br><br>
+			<a href="{{ absolute_url(path('verify_user', {token:token})) }}">Valider mon compte</a>
+			Ce lien est valable 24h.
+			<br><br>
+			Toute l'équipe de TRT Conseil vous remercie pour votre confiance et vous souhaite une belle journée.
+			<br><br>
+			L'équipe TRT Conseil
+			<br><br>
+			<strong>Ceci est un mail automatique, merci de ne pas y répondre</strong>
+		</p>
+	</body>
+</html>

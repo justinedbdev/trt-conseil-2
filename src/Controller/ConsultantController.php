@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Service\JWTService;
+use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +18,9 @@ class ConsultantController extends AbstractController
 {
     public function __construct(
         private UserRepository $userRepo,
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private JWTService $jwt,
+        private MailerService $mailerService,
     ) {
     }
 
@@ -49,6 +54,40 @@ class ConsultantController extends AbstractController
                 'accounts' => $accounts,
                 'role' => $roleStr,
             ]);
+        }
+    }
+
+    #[Route('/activer/compte/{id}', name: 'active_user')]
+    public function activedAccount(User $user): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        } else {
+
+            $user->setIsValidated(true);
+            $this->em->flush();
+            $this->addFlash('success', 'Le compte a été activé');
+
+            $header = [
+                'type' => 'JWT',
+                'alg' => 'HS256'
+            ];
+            $payload = [
+                'user_id' => $user->getId()
+            ];
+            $token = $this->jwt->generate($header, $payload, $this->getParameter('app.jwtsecret'));
+
+            $this->mailerService->send(
+                $user->getEmail(),
+                'Activation de votre compte',
+                'activeAccount.html.twig',
+                [
+                    'user' => $user,
+                    'token' => null,
+                ]
+            );
+            $this->addFlash('info', 'Un email d\'activation a bien été envoyé.');
+            return $this->redirectToRoute('valid_account');
         }
     }
 }

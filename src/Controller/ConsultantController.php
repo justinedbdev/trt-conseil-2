@@ -83,7 +83,7 @@ class ConsultantController extends AbstractController
                 'activeAccount.html.twig',
                 [
                     'user' => $user,
-                    'token' => null,
+                    'token' => $token,
                 ]
             );
             $this->addFlash('info', 'Un email d\'activation a bien été envoyé.');

@@ -37,6 +37,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Recruiter::class)]
     private Collection $Recruiters;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $isValidated = null;
+
     public function __construct()
     {
         $this->Candidats = new ArrayCollection();
@@ -169,6 +172,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $recruiter->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isIsValidated(): ?bool
+    {
+        return $this->isValidated;
+    }
+
+    public function setIsValidated(?bool $isValidated): static
+    {
+        $this->isValidated = $isValidated;
 
         return $this;
     }

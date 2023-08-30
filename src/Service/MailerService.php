@@ -31,12 +31,6 @@ class MailerService
       ->htmlTemplate("mail/$templateTwig")
       ->context($context);
 
-    try {
-
-      $this->mailer->send($email);
-    } catch (TransportExceptionInterface $transportException) {
-      /**@var TransportExceptionInterface $transportException */
-      throw $transportException;
-    }
+    $this->mailer->send($email);
   }
 }

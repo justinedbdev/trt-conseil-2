@@ -26,7 +26,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Votre email',
                 'required' => true,
                 'attr' => [
-                    'class' => 'mt-2',
+                    'class' => 'form-control',
                     'placeholder' => 'Entrez votre email'
                 ],
                 'constraints' => [
@@ -51,25 +51,34 @@ class RegistrationFormType extends AbstractType
                     'attr' => [
                         'class' => 'password-field',
                         'autocomplete' => 'new-password',
-                        'placeholder' => 'Entrez votre mot de passe'
                     ]
                 ],
                 'required' => true,
                 'first_options'  => [
                     'label' => 'Entrez votre mot de passe',
+                    'attr' => [
+                        'class' => 'form-control',
+                        'placeholder' => 'Entrez votre mot de passe'
+                    ],
                     'constraints' => [
                         new NotBlank(['message' => 'Veuillez saisir un mot de passe.']),
                         new Length(['min' => 6, 'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères', 'max' => 4096,]),
-                    ]],
+                    ]
+                ],
                 'second_options' => [
                     'label' => 'Validez votre mot de passe',
+                    'attr' => [
+                        'class' => 'form-control',
+                        'placeholder' => 'Validez votre mot de passe'
+                    ],
                     'constraints' => [
                         new NotBlank(['message' => 'Veuillez saisir un mot de passe.']),
                         new Length(['min' => 6, 'minMessage' => 'Votre mot de passe doit contenir au moins {{ limit }} caractères', 'max' => 4096,]),
-                    ]],
+                    ]
+                ],
             ])
             ->add('roles', ChoiceType::class, [
-                'label' => 'Vous êtes' ,
+                'label' => 'Vous êtes',
                 'expanded' => true,
                 'choices' => [
                     'Candidat' => 'ROLE_CANDIDAT',
@@ -81,16 +90,16 @@ class RegistrationFormType extends AbstractType
                     new NotBlank(['message' => 'Veuillez choisir une proposition.'])
                 ]
             ]);
-            
+
         $builder->get('roles')
-        ->addModelTransformer(new CallbackTransformer(
-            function ($rolesAsArray): string {
-                return implode(',', $rolesAsArray);
-            },
-            function ($rolesAsString): array {
-                return explode(',', $rolesAsString);
-            }
-        ));
+            ->addModelTransformer(new CallbackTransformer(
+                function ($rolesAsArray): string {
+                    return implode(',', $rolesAsArray);
+                },
+                function ($rolesAsString): array {
+                    return explode(',', $rolesAsString);
+                }
+            ));
     }
 
     public function configureOptions(OptionsResolver $resolver): void

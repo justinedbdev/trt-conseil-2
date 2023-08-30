@@ -4,5 +4,50 @@
 {% endblock %}
 
 {% block body %}
-	<h1>Compte utilisateur à valider</h1>
-{% endblock %}
+	{% if app.user %}
+		<div class="d-flex justify-content-end align-item-center px-2">
+			<p class="connected" alt="Vous êtes connecté en tant que {{ app.user.email }}" title="Vous êtes connecté en tant que {{ app.user.email }}">
+				<i class="fas fa-user-circle"></i>
+				{{ app.user.email}}
+			</p>
+		</div>
+
+		<h1>Compte utilisateur à valider</h1>
+		<main class="container ">
+
+			{% if accounts %}
+				{% for account in accounts %}
+
+					<section class="account border border-dark p-3">
+						<div class="row">
+							<div class="col-12 d-flex justify-content-around flex-wrap">
+								<p>{{ account.email }}
+									-
+								</p>
+								{% if account.roles[0] == "ROLE_RECRUITER" %}
+									<p>Recruteur</p>
+								{% else %}
+									<p>Candidat</p>
+								{% endif %}
+								<a href="{{ path('active_user', { id : account.id }) }}" type="button" class="btn btnValidate btn-sm " title="Valider un compte de connexion" alt="Valider un compte de connexion">Valider</a>
+							</div>
+						</div>
+					</section>
+				{% endfor %}
+			{% else %}
+				<div class="alert alert-success" role="alert">
+					<div class="alert-message text-center">
+						<h4>Aucun Comptes à valider</h4>
+					</div>
+				</div>
+			{% endif %}
+		{% else %}
+			<div class="container alert alert-danger mt-5" role="alert">
+				<div class="alert-message text-center">
+					<h4 class="text-dark">Vous devez être connecté</h4>
+					<a class="text-primary" title="Lien pour se connecter" alt="Lien pour se connecter" href=" {{ path('app_login') }} ">Connectez-vous</a>
+				</div>
+			</div>
+		{% endif %}
+	</main>
+</body>{% endblock %}

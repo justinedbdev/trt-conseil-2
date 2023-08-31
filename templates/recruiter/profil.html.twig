@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon profil
+{% endblock %}
+
+{% block body %}
+
+	<h1>Mon profil recruteur</h1>
+
+	{% if editMode %}
+		<h2 class="mt-4 center blue fs-1">
+			Modifier votre profil</h2>
+	{% else %}
+		<h2 class="mt-4 center blue fs-1">
+			Compléter votre profil</h2>
+	{% endif %}
+
+	{{ form_start(recruiterForm, { 'attr': {'class': 'formProfil'} }) }}
+
+	<fieldset class="mb-3">
+		{{ form_row(recruiterForm.companyName) }}
+		{{ form_row(recruiterForm.address) }}
+	</fieldset>
+	<div class="d-flex justify-content-center">
+		{% if editMode %}
+			<button type="submit" class="btn btn-sm btn-warning my-3 ">Modifier</button>
+		{% else %}
+			<button type="submit" class="btn btn-sm btn-info my-3 mx-auto">Enregistrer</button>
+		{% endif %}
+	</div>
+
+	{{ form_end(recruiterForm) }}
+
+{% endblock %}

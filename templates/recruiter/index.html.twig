@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recruiteur
+{% endblock %}
+
+{% block body %}
+	<h1>Mon espace recruteur</h1>
+
+	<main>
+		<section>
+			{% for recruiter in recruiters %}
+				<div class="card" style="max-width: 18rem;">
+					<h5 class="card-header center">
+						{{ recruiter.companyName }}</h5>
+					<div class="card-body">
+						<h5 class="card-title">{{ recruiter.address }}</h5>
+					</div>
+					<div class="center m-4">
+						<a href="{{ path('editRecruiter',{'id': recruiter.id })}}" class="btn btn-sm btn-warning ">Modifier</a>
+					</div>
+				</div>
+			{% else %}
+				<div class="container alert alert-danger mt-5" role="alert">
+					<div class="alert-message text-center">
+						<h4 class="text-dark">Vous devez mettre à jour votre profil pour accéder à cette page</h4>
+						<a class="text-primary" title="Lien pour se connecter" alt="Lien pour se connecter" href=" {{ path('profilRecruiter') }} ">Complétez votre profil</a>
+					</div>
+				</div>
+			{% endfor %}
+		</section>
+	</main>
+
+{% endblock %}

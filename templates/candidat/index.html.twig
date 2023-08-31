@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Candidat
+{% endblock %}
+
+{% block body %}
+	<h1>Mon espace candidat</h1>
+
+	<main>
+		{% for candidat in candidats %}
+
+			<section>
+				<div class="card" style="width: 18rem;">
+					<h5 class="card-header center">{{ candidat.firstname }}
+						{{ candidat.surname }}</h5>
+					<div class="card-body">
+						<p class="card-text">
+							<a href="{{ asset('uploads/cv/' ~ candidat.cv) }} " target="_blank">Cliquez-ici pour visualiser votre CV
+							</a>
+						</p>
+					</div>
+					<div class="center m-4">
+						<a href="{{ path('editCandidat',{'id': candidat.id}) }}" class="btn btn-sm btn-warning">Editer</a>
+					</div>
+				</div>
+			</section>
+
+			<section>
+				{% for apply in applies %}
+					<div class="card text-white bg-dark" style="width: 18rem;">
+						<h5 class="card-header center underline">Candidatures :</h5>
+						<div class="card-body">
+							<p class="card-text">
+								Pour la société :
+								{{ apply.joboffer.recruiter.companyName }}
+							</p>
+							<p class="card-text">
+								{{ apply.joboffer.title }}
+							</p>
+							<p class="card-text">
+								{{ apply.joboffer.description }}
+							</p>
+						</div>
+					</div>
+				{% else %}
+					<div class="container alert alert-danger mt-5" role="alert">
+						<div class="alert-message text-center">
+							<p>Vous n'avez postulé à aucune offres d'emploi</p>
+						</div>
+					</div>
+				{% endfor %}
+			</section>
+		{% else %}
+			<div class="container alert alert-danger mt-5" role="alert">
+				<div class="alert-message text-center">
+					<h4 class="text-dark">Vous devez mettre à jour votre profil pour accéder à cette page</h4>
+					<a class="text-primary" title="Lien pour se connecter" alt="Lien pour se connecter" href=" {{ path('profilC') }} ">Complétez votre profil</a>
+				</div>
+			</div>
+		{% endfor %}
+	</main>
+{% endblock %}

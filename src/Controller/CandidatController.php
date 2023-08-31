@@ -60,7 +60,7 @@ class CandidatController extends AbstractController
         ]);
     }
 
-    #[Route('/profil', name: 'profilC')]
+    #[Route('/profil', name: 'profilCandidat')]
     public function profil(Request $request, SluggerInterface $slugger, Candidat $candidat = null): Response
     {
         if (!$this->getUser()) {

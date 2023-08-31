@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Consultant
+{% endblock %}
+
+{% block body %}
+
+	{% if app.user %}
+		{% if jobOffers %}
+			<div class="jobOffers">
+				<h2 class="mb-4 center">Offres d'emploi à valider</h2>
+				<div class="d-flex justify-content-center flex-wrap container ">
+
+					{% for jobOffer in jobOffers %}
+
+						<div class="card" style="width: 18rem;">
+							<div class="card-header">
+								<h5 class="card-title center">{{ jobOffer.recruiter.companyName }}</h5>
+							</div>
+							<div class="card-body">
+								<h6 class="card-subtitle mb-2 text-muted">Lieu :
+									{{ jobOffer.city }}</h6>
+								<h6 class="card-subtitle text-muted mb-2 ">Recherche :
+								</h6>
+								<p class="center">{{jobOffer.title}}</p>
+								<p class="card-text">{{ jobOffer.description }}</p>
+							</div>
+
+							<div class="card-footer d-flex justify-content-around">
+								<a href="{{ path('active_joboffer', { id : jobOffer.id }) }}" type="button" class="btn btn-primary btn-sm mx-auto" title="Valider l'annonce" alt="Valider l'annonce">VALIDER</a>
+							</div>
+						</div>
+
+					{% endfor %}
+				</div>
+			</div>
+
+
+		{% else %}
+			<div class="alert alert-success" role="alert">
+				<div class="alert-message text-center">
+					<h4>Aucune Offres d'emploi à valider</h4>
+				</div>
+			</div>
+		{% endif %}
+
+	{% else %}
+		<div class="container alert alert-danger mt-5" role="alert">
+			<div class="alert-message text-center">
+				<h4 class="text-dark">Vous devez être connecté</h4>
+				<a class="text-primary" title="Lien pour se connecter" alt="Lien pour se connecter" href=" {{ path('app_login') }} ">Connectez-vous</a>
+			</div>
+		</div>
+	{% endif %}
+{% endblock %}

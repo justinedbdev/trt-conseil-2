@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\JobOffer;
 use App\Entity\User;
+use App\Repository\JobOfferRepository;
 use App\Repository\UserRepository;
 use App\Service\JWTService;
 use App\Service\MailerService;
@@ -21,6 +23,7 @@ class ConsultantController extends AbstractController
         private EntityManagerInterface $em,
         private JWTService $jwt,
         private MailerService $mailerService,
+        private JobOfferRepository $jobOfferRepo,
     ) {
     }
 
@@ -90,8 +93,58 @@ class ConsultantController extends AbstractController
             return $this->redirectToRoute('valid_account');
         }
     }
-}
 
-# return $this->render('consultant/index.html.twig', [
-#'controller_name' => 'ConsultantController',
-#]);
+    #[Route('/validation-offre', name: 'valid_jobOffer')]
+    public function actifJobOffer(): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        } else {
+
+            $jobOffers = $this->jobOfferRepo->findBy(['isValidated' => false]);
+
+            return $this->render('consultant/jobOfferActive.html.twig', [
+                'jobOffers' => $jobOffers,
+            ]);
+        }
+    }
+
+    #[Route('/activer/offre/{id}', name: 'active_joboffer')]
+    public function activedJobOffer(JobOffer $jobOffer, User $user): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        } else {
+
+            $jobOffer->setIsValidated(true);
+            $mail = $jobOffer->getRecruiter()->getUser()->getEmail();
+            $name = $jobOffer->getRecruiter()->getCompanyName();
+            $userId = $jobOffer->getRecruiter()->getUser()->getId();
+            $this->em->flush();
+            $this->addFlash('success', 'Annonce activée');
+
+            $header = [
+                'type' => 'JWT',
+                'alg' => 'HS256'
+            ];
+
+            $payload = [
+                'user_id' => $userId
+            ];
+
+            $token = $this->jwt->generate($header, $payload, $this->getParameter('app.jwtsecret'));
+
+            $this->mailerService->send(
+                $mail,
+                'Votre Annonce a bien été activée',
+                'activeJobOffer.html.twig',
+                [
+                    'user' => $user,
+                    'token' => $token,
+                ]
+            );
+            $this->addFlash('info', 'Un email d\'activation a bien été envoyé.');
+            return $this->redirectToRoute('valid_jobOffer');
+        }
+    }
+}

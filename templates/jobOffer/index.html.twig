@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Annonces d'emploi
+{% endblock %}
+
+{% block body %}
+
+	{% if jobOffers %}
+		<div class="d-flex justify-content-center flex-wrap container">
+
+			{% for jobOffer in jobOffers %}
+				<div class="box_jobOffer">
+					<h3 class="">La société :
+						<strong>{{ jobOffer.recruiter.companyName}}
+						</strong>
+					</h3>
+					<p class="center">recherche</p>
+					<h4 class="titleJobOffer center">un(e)
+						{{ jobOffer.title }}</h4>
+					<h5 class="py-3 city">Sur
+						{{ jobOffer.city }}</h5>
+					<p>{{ jobOffer.content }}</p>
+					{% if app.user  %}
+						{% if app.user.isValidated %}
+							<div class="text-center ">
+								<a href="{{ path('apply', { id : joboffer.id }) }}" type="button" class="btn btn-primary btn-sm ">Postuler</a>
+							</div>
+						{% else %}
+							<div class="alert alert-success mt-4 text-center">
+								<p>Votre compte n'est pas activé, merci de patienter</p>
+							</div>
+
+						{% endif %}
+					{% else %}
+						<div class="alert alert-success mt-4 text-center ">
+							<p>Vous devez être connecté pour postuler à cette annonce !</p>
+							<div class="d-flex d-flex justify-content-around">
+								<a type="button" class="btn btn-success btn-sm " title="Lien pour se connecter" alt="Lien pour se connecter" href=" {{ path('app_login') }} ">Connectez-vous</a>
+								<a type="button" class="btn btn-success btn-sm " title="Lien pour s'inscrire" alt="Lien pour s'inscrire" href=" {{ path('app_register') }} ">Inscrivez-vous</a>
+							</div>
+						</div>
+					{% endif %}
+				</div>
+			{% endfor %}
+		</div>
+	{% else %}
+		<div class="alert alert-info mt-4 text-center">
+			<p>Aucunes offres actuellement</p>
+		</div>
+	{% endif %}
+
+{% endblock %}

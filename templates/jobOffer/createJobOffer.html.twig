@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Annonces d'emploi
+{% endblock %}
+
+{% block body %}
+
+	{% for recruiter in recruiters %}
+		{% if editMode %}
+			<h2 class="center blue my-5 ">Modifier l'annonce</h2>
+		{% else %}
+			<h2 class="center blue my-5 ">Créer une annonce</h2>
+		{% endif %}
+
+		<section class="container annonce">
+			<div class="row">
+				<div class="col">
+
+					{{ form_start(JobOfferFormType) }}
+					<fieldset>
+						{{ form_row(JobOfferFormType.title) }}
+						{{ form_row(JobOfferFormType.city) }}
+						{{ form_row(JobOfferFormType.description) }}
+					</fieldset>
+
+					<div class="center">
+						{% if editMode %}
+							<button type="submit" class="btn btn-sm btn-info my-3 mx-auto">Modifier</button>
+						{% else %}
+							<button type="submit" class="btn btn-sm btn-info my-3 ">Enregistrer</button>
+						{% endif %}
+					</div>
+					{{ form_end(JobOfferFormType) }}
+
+				{% else %}
+					<div class="container alert alert-danger mt-5" role="alert">
+						<div class="alert-message text-center">
+							<h4 class="text-dark">Vous devez mettre vous profil à jour pour accéder à cette page</h4>
+							<a class="text-primary" title="Lien pour se connecter" alt="Lien pour se connecter" href=" {{ path('profilRecruiter') }} ">Complétez votre profil</a>
+						</div>
+					</div>
+				{% endfor %}
+
+			{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Annonces
+{% endblock %}
+
+{% block body %}
+
+	<h1>Listes des candidats</h1>
+
+	{% if candidats %}
+		<div class="d-flex justify-content-center flex-wrap container ">
+
+			{% for candidat in candidats %}
+				<div>
+					<h3 class="center">
+						<strong>{{ candidat.firstname }}
+							{{ candidat.surname }}
+						</strong>
+					</h3>
+					<p>est disponible pour une future collaboration.</p>
+
+					{% if app.user %}
+						{% if app.user.isValidated %}
+							<p>
+								<a href=" {{ asset('uploads/cv/' ~ candidat.cv ) }} " target=" _blank" class="btn btn-primary btn-sm" type="button" alt="Cliquez-ici pour voir le cv" title="Cliquez-ici pour voir le cv">Visualiser son CV</a>
+							</p>
+						{% else %}
+							<div class="alert alert-success mt-4 text-center">
+								<p>Votre compte n'est pas activé, merci de patienter</p>
+							</div>
+						{% endif %}
+
+					{% else %}
+						<div class="alert alert-info mt-4 text-center">
+							<p>Vous devez être connecté pour accéder à son CV !!</p>
+						</div>
+
+					{% endif %}
+				</div>
+			{% endfor %}
+		</div>
+	{% else %}
+
+		<div class="alert alert-info mt-4 text-center">
+			<p>Aucune candidatures actuellement</p>
+		</div>
+	{% endif %}
+{% endblock %}

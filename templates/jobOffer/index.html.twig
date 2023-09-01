@@ -19,11 +19,11 @@
 						{{ jobOffer.title }}</h4>
 					<h5 class="py-3 city">Sur
 						{{ jobOffer.city }}</h5>
-					<p>{{ jobOffer.content }}</p>
+					<p>{{ jobOffer.description }}</p>
 					{% if app.user  %}
 						{% if app.user.isValidated %}
 							<div class="text-center ">
-								<a href="{{ path('apply', { id : joboffer.id }) }}" type="button" class="btn btn-primary btn-sm ">Postuler</a>
+								<a href="{{ path('apply', { id : jobOffer.id }) }}" type="button" class="btn btn-primary btn-sm ">Postuler</a>
 							</div>
 						{% else %}
 							<div class="alert alert-success mt-4 text-center">

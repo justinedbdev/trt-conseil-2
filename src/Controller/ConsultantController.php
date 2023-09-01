@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\JobOffer;
+use App\Entity\Recruiter;
 use App\Entity\User;
 use App\Repository\JobOfferRepository;
 use App\Repository\UserRepository;
@@ -140,6 +141,7 @@ class ConsultantController extends AbstractController
                 'activeJobOffer.html.twig',
                 [
                     'user' => $user,
+                    'name' => $name,
                     'token' => $token,
                 ]
             );

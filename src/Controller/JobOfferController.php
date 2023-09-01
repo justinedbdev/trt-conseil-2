@@ -43,7 +43,7 @@ class JobOfferController extends AbstractController
         $jobOffers = $this->jobOfferRepo->findBy(['isValidated' => true]);
 
         return $this->render('jobOffer/index.html.twig', [
-            'joboffers' => $jobOffers,
+            'jobOffers' => $jobOffers,
             'user' => $user,
         ]);
     }

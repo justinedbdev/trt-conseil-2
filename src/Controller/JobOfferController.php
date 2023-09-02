@@ -49,7 +49,7 @@ class JobOfferController extends AbstractController
     }
 
     #[IsGranted('ROLE_RECRUITER')]
-    #[Route('/créer', name: 'createApply')]
+    #[Route('/creer', name: 'createJobOffer')]
     public function newJobOffer(Request $request, RecruiterRepository $recruiterRepo, JobOffer $jobOffer = null): Response
     {
         /**
@@ -80,7 +80,7 @@ class JobOfferController extends AbstractController
             $this->em->persist($jobOffer);
             $this->em->flush();
             $this->addFlash('success', 'Votre annonce est en cours de vérification, vous recevrez un email lorsqu\'elle sera active.');
-            return $this->redirectToRoute('app_recruiter');
+            return $this->redirectToRoute('app_jobOffer');
         }
 
         return $this->render('jobOffer/createJobOffer.html.twig', [
@@ -91,7 +91,7 @@ class JobOfferController extends AbstractController
     }
 
     #[IsGranted('ROLE_RECRUITER')]
-    #[Route('/modifier/{id}', name: 'editApply')]
+    #[Route('/modifier/{id}', name: 'editJobOffer')]
     public function editJobOffer(Request $request, JobOffer $jobOffer = null): Response
     {
         /**
@@ -107,7 +107,7 @@ class JobOfferController extends AbstractController
             $jobOffer = new JobOffer();
         }
 
-        $form = $this->createForm(JobOfferType::class, $jobOffer);
+        $form = $this->createForm(JobOfferFormType::class, $jobOffer);
         $form->handleRequest($request);
 
         $jobOffer->setIsValidated(false);
@@ -128,14 +128,14 @@ class JobOfferController extends AbstractController
     }
 
     #[IsGranted('ROLE_RECRUITER')]
-    #[Route('/supprimer/{id}', name: 'removeApply')]
+    #[Route('/supprimer/{id}', name: 'removeJobOffer')]
     public function removeJobOffer(JobOffer $jobOffer, JobOfferRepository $jobRepo): Response
     {
         /**
          * @var User $user
          */
         if (!$this->getUser()) {
-            $this->addFlash('alert', 'Vous devez être connecté pour accéde à cette page.');
+            $this->addFlash('alert', 'Vous devez être connecté pour accéder à cette page.');
             return $this->redirectToRoute('app_login');
         } else {
 

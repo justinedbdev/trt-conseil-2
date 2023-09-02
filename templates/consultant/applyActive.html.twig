@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Consultant
+{% endblock %}
+
+{% block body %}
+
+	<h1>Candidatures à valider</h1>
+
+	{% if app.user %}
+		{% if applies %}
+
+			<div>
+				<div class="d-flex justify-content-center flex-wrap container ">
+					{% for apply in applies %}
+
+						<div class="card" style="width: 18rem;">
+							<div class="card-header">
+								<h5 class="card-title center">{{ apply.candidat.firstname }}
+									vient de postuler pour le poste de :
+									{{ apply.jobOffer.title }}</h5>
+
+								<h6 class="card-subtitle text-muted mb-2 ">Société :
+									{{ apply.jobOffer.recruiter.companyName }}</h6>
+								<p class="card-text">{{ apply.jobOffer.description }}</p>
+								<p class="card-text">
+									<a href="{{ asset('uploads/cv/' ~ apply.candidat.cv ) }} " target="_blank">Cliquez-ici pour visualiser le CV
+									</a>
+								</p>
+							</div>
+
+							<div class="card-footer d-flex justify-content-around">
+								<a href="{{ path('active_apply', { id : apply.id }) }}" type="button" class="btn btn-primary btn-sm mb-5" title="Valider la candidature" alt="Valider la candidature">Valider</a>
+								<a href="{{ path('remove_apply', { id : apply.id }) }}" type="button" class="btn btn-danger btn-sm mb-5" title="Supprimer la candidature" alt="Supprimer la candidature">Supprimer</a>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+
+		{% else %}
+			<div class="alert alert-success" role="alert">
+				<div class="alert-message text-center">
+					<h4>Aucune candidature à valider</h4>
+				</div>
+			</div>
+		{% endif %}
+
+	{% else %}
+		<div class="container alert alert-danger mt-5" role="alert">
+			<div class="alert-message text-center">
+				<h4 class="text-dark">Vous devez être connecté</h4>
+				<a class="text-primary" title="Lien pour se connecter" alt="Lien pour se connecter" href=" {{ path('app_login') }} ">Connectez-vous</a>
+			</div>
+		</div>
+	{% endif %}
+{% endblock %}

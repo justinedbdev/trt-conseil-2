@@ -6,13 +6,19 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<body>
-		<h1>Activation de votre annonce</h1>
+		<h1>Nouvelle candidature</h1>
 		<p>
-			Bonjour
-			{{ name }}
+			Bonjour, un candidat vient de postuler à votre annonce :
+			<ul>
+				<li>{{ jobOffer.title }}</li>
+				<li>{{ jobOffer.description }}</li>
+			</ul>
 			<br><br>
-			Nous avons le plaisir de vous annoncer que votre annonce a été activée.
-						Elle est maintenant visible pour les candidats.
+			Candidat:
+			{{ candidat.firstname|upper }}
+			{{ candidat.surname|capitalize }}
+			<br>
+			{{ candidat.user.email }}
 			<br><br>
 			Toute l'équipe de TRT Conseil vous remercie pour votre confiance et vous souhaite une belle journée.
 			<br><br>

@@ -8,6 +8,16 @@
 
 	<main>
 		<section>
+			<div class="d-flex justify-content-center ">
+				<nav class="shadow-5-strong ">
+					<a href="{{ path('createJobOffer')}}" alt="Poster une annonce" title="Poster une annonce">Poster une annonce
+					</a>
+					<a class="nav-link" href="{{ path('app_apply') }}" alt="Liste des candidats" title="Liste des candidats">Liste des candidats</a>
+				</nav>
+			</div>
+		</section>
+
+		<section>
 			{% for recruiter in recruiters %}
 				<div class="card" style="max-width: 18rem;">
 					<h5 class="card-header center">
@@ -28,6 +38,65 @@
 				</div>
 			{% endfor %}
 		</section>
-	</main>
 
+		<h2 class="center my-5">Mes Annonces</h2>
+		{% if jobOffers %}
+			<section class="espace rounded">
+				<div class="row">
+					<div class="col-12">
+
+						<div class="d-flex justify-content-center flex-wrap container ">
+
+							{% for jobOffer in jobOffers %}
+								{% if jobOffer.isIsValidated %}
+
+									<div>
+										<h3 class="center">
+											Vous recherchez</h3>
+										<h4 class="center">{{ jobOffer.title }}</h4>
+										<p class="text-muted">Annonce n°{{ jobOffer.id }}</p>
+										<p>{{ jobOffer.description }}</p>
+
+										<div class="d-flex justify-content-around m-4">
+											<a href="{{ path('editJobOffer',{'id': jobOffer.id })}}" class="mr-5 btn btn-sm btn-warning">Modifier</a>
+											<a href="{{ path('removeJobOffer',{'id': jobOffer.id })}}" class="btn btn-sm btn-danger">Supprimer</a>
+										</div>
+									</div>
+
+								{% else %}
+									<div class="alert alert-info mt-4 text-center">
+										<p>Votre annonce de "{{ jobOffer.title }}" n'a pas été vérifiée et activée</p>
+									</div>
+								{% endif %}
+
+							{% else %}
+								<div class="alert alert-info mt-4 text-center">
+									<p>Vous n'avez posté aucune annonce !</p>
+									<a class="" href="{{ path('createJobOffer')}}" alt="Poster une annonce" title="Poster une annonce">Poster une annonce</a>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</section>
+		{% endif %}
+		<section>
+			{% if candidatures %}
+				<h3 class="center mt-5">Candidatures:</h3>
+				{% for candidature in candidatures %}
+					<div>
+						<p class="text-muted">Pour l'annonce n°{{ candidature.jobOffer.id }}</p>
+						<h4 class="titleJobOffer center my-4">{{ candidature.candidat.firstname }}</h4>
+						<p class="underline">
+							<a href="{{ asset('uploads/cv/' ~ candidature.candidat.cv ) }} " target="_blank">Visualiser le CV</a>
+						</p>
+					</div>
+				{% else %}
+					<div class="alert alert-info mt-4 text-center">
+						<p>Vous n'avez aucune candidature !</p>
+					</div>
+				{% endfor %}
+			{% endif %}
+		</section>
+	</main>
 {% endblock %}

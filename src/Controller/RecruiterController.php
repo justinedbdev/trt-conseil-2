@@ -51,7 +51,7 @@ class RecruiterController extends AbstractController
         return $this->render('recruiter/index.html.twig', [
             'user' => $user,
             'recruiters' => $recruiters,
-            'joboffers' => $jobOffers,
+            'jobOffers' => $jobOffers,
             'candidatures' => $candidatures,
         ]);
     }

@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Apply;
 use App\Entity\JobOffer;
 use App\Entity\Recruiter;
 use App\Entity\User;
+use App\Repository\ApplyRepository;
 use App\Repository\JobOfferRepository;
 use App\Repository\UserRepository;
 use App\Service\JWTService;
@@ -25,6 +27,7 @@ class ConsultantController extends AbstractController
         private JWTService $jwt,
         private MailerService $mailerService,
         private JobOfferRepository $jobOfferRepo,
+        private ApplyRepository $applyRepo,
     ) {
     }
 
@@ -120,20 +123,8 @@ class ConsultantController extends AbstractController
             $jobOffer->setIsValidated(true);
             $mail = $jobOffer->getRecruiter()->getUser()->getEmail();
             $name = $jobOffer->getRecruiter()->getCompanyName();
-            $userId = $jobOffer->getRecruiter()->getUser()->getId();
             $this->em->flush();
             $this->addFlash('success', 'Annonce activée');
-
-            $header = [
-                'type' => 'JWT',
-                'alg' => 'HS256'
-            ];
-
-            $payload = [
-                'user_id' => $userId
-            ];
-
-            $token = $this->jwt->generate($header, $payload, $this->getParameter('app.jwtsecret'));
 
             $this->mailerService->send(
                 $mail,
@@ -142,11 +133,91 @@ class ConsultantController extends AbstractController
                 [
                     'user' => $user,
                     'name' => $name,
-                    'token' => $token,
                 ]
             );
             $this->addFlash('info', 'Un email d\'activation a bien été envoyé.');
             return $this->redirectToRoute('valid_jobOffer');
+        }
+    }
+
+    #[Route('/validation-candidature', name: 'valid_apply')]
+    public function actifApply(): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        } else {
+
+            $applies = $this->applyRepo->findBy(['isValidated' => false]);
+
+            return $this->render('consultant/applyActive.html.twig', [
+                'applies' => $applies,
+            ]);
+        }
+    }
+
+    #[Route('/activer/candidature/{id}', name: 'active_apply')]
+    public function activedApply(Apply $apply): Response
+    {
+        if (!$this->getUser()) {
+            $this->addFlash('danger', 'Vous devez être connecté pour accéder à cette page.');
+            return $this->redirectToRoute('app_login');
+        } else {
+            $apply->setIsValidated(true);
+
+            $this->em->persist($apply);
+            $this->em->flush();
+            $this->addFlash('success', 'Candidature acceptée');
+
+            $mail = $apply->getJobOffer()->getRecruiter()->getUser()->getEmail();
+            $recruiter = $apply->getJobOffer()->getRecruiter();
+            $jobOffer = $apply->getJobOffer();
+            $candidat = $apply->getCandidat();
+            $apply = $this->applyRepo;
+
+            $this->mailerService->send(
+                $mail,
+                'Nouvelle Candidature',
+                'apply.html.twig',
+                [
+                    'recruiter' => $recruiter,
+                    'candidat' => $candidat,
+                    'jobOffer' => $jobOffer,
+                    'apply' => $apply,
+                ]
+            );
+            $this->addFlash('info', 'Un email a bien été envoyé au recruteur.');
+            return $this->redirectToRoute('valid_apply');
+        }
+    }
+
+    #[Route('/supprimer-candidature/{id}', name: 'remove_apply')]
+    public function removeApply(Apply $apply, ApplyRepository $applyRepo): Response
+    {
+        if (!$this->getUser()) {
+            $this->addFlash('danger', 'Vous devez être connecté pour accéder à cette page.');
+            return $this->redirectToRoute('app_login');
+        } else {
+
+            $applyRepo->remove($apply);
+
+            $this->em->flush();
+            $this->addFlash('success', 'Candidature supprimée');
+
+            $mail = $apply->getCandidat()->getUser()->getEmail();
+            $jobOffer = $apply->getJobOffer();
+            $candidat = $apply->getCandidat();
+
+            $this->mailerService->send(
+                $mail,
+                'Candidature refusée',
+                'removeApply.html.twig',
+                [
+                    'candidat' => $candidat,
+                    'jobOffer' => $jobOffer,
+                ]
+            );
+            $this->addFlash('info', 'Un email a bien été envoyé au candidat.');
+            return $this->redirectToRoute('valid_apply');
         }
     }
 }

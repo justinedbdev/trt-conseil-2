@@ -9,22 +9,31 @@
 		<div class="d-flex justify-content-center flex-wrap container">
 
 			{% for jobOffer in jobOffers %}
-				<div class="box_jobOffer">
-					<h3 class="">La société :
+				<div>
+					<h3>La société :
 						<strong>{{ jobOffer.recruiter.companyName}}
 						</strong>
 					</h3>
 					<p class="center">recherche</p>
-					<h4 class="titleJobOffer center">un(e)
+					<h4 class="center">un(e)
 						{{ jobOffer.title }}</h4>
-					<h5 class="py-3 city">Sur
+					<h5 class="py-3">Sur
 						{{ jobOffer.city }}</h5>
 					<p>{{ jobOffer.description }}</p>
-					{% if app.user  %}
+					{% if app.user %}
 						{% if app.user.isValidated %}
-							<div class="text-center ">
-								<a href="{{ path('apply', { id : jobOffer.id }) }}" type="button" class="btn btn-primary btn-sm ">Postuler</a>
-							</div>
+							{% if is_granted('ROLE_CANDIDAT') %}
+								<div class="text-center">
+									<a href="{{ path('apply', { id : jobOffer.id }) }}" type="button" class="btn btn-primary btn-sm">Postuler</a>
+								</div>
+							{% elseif is_granted('ROLE_RECRUITER') %}
+								<div class="text-center">
+									<a href="{{ path('editJobOffer', { id : jobOffer.id }) }}" type="button" class="btn btn-primary btn-sm">Modifier</a>
+								</div>
+								<div class="text-center">
+									<a href="{{ path('removeJobOffer', { id : jobOffer.id }) }}" type="button" class="btn btn-primary btn-sm">Supprimer</a>
+								</div>
+							{% endif %}
 						{% else %}
 							<div class="alert alert-success mt-4 text-center">
 								<p>Votre compte n'est pas activé, merci de patienter</p>
@@ -45,7 +54,7 @@
 		</div>
 	{% else %}
 		<div class="alert alert-info mt-4 text-center">
-			<p>Aucunes offres actuellement</p>
+			<p>Aucune offre actuellement</p>
 		</div>
 	{% endif %}
 

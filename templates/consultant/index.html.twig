@@ -9,4 +9,27 @@
 	<h2>Bonjour
 		{{ app.user.email }}
 	</h2>
+
+	{% if app.user %}
+		<h3>Vous pouvez valider :
+		</h3>
+		<ul>
+			<li>
+				<a href="{{ path('valid_account') }}" class="" title="Valider des comptes de connexion" alt="Valider des comptes de connexion">Des comptes de connexion</a>
+			</li>
+			<li>
+				<a href="{{ path('valid_apply') }}">Des candidatures</a>
+			</li>
+			<li>
+				<a href="{{ path('valid_jobOffer') }}">Des offres d'emploi</li>
+			</li>
+		</ul>
+	{% else %}
+		<div class="container alert alert-danger mt-5" role="alert">
+			<div class="alert-message text-center">
+				<h4 class="text-dark">Vous devez être connecté</h4>
+				<a class="text-primary" title="Lien pour se connecter" alt="Lien pour se connecter" href=" {{ path('app_login') }} ">Connectez-vous</a>
+			</div>
+		</div>
+	{% endif %}
 {% endblock %}

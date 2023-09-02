@@ -6,15 +6,19 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<body>
-		<h1>Activation de votre annonce</h1>
+		<h1>Candidature refusée</h1>
 		<p>
-			Bonjour
-			{{ name }}
+			Bonjour, , vous avez postuler à une offre d'emploi :
+			<ul>
+				<li>Pour la société :
+					{{ jobOffer.recruiter.companyName }}</li>
+				<li>Poste recherché :
+					{{ jobOffer.title }}</li>
+			</ul>
 			<br><br>
-			Nous avons le plaisir de vous annoncer que votre annonce a été activée.
-						Elle est maintenant visible pour les candidats.
+			Malheureusement votre candidature n'a pas été acceptée.
 			<br><br>
-			Toute l'équipe de TRT Conseil vous remercie pour votre confiance et vous souhaite une belle journée.
+			Nous vous souhaitons bon courage dans vos recherches.
 			<br><br>
 			L'équipe TRT Conseil
 			<br><br>

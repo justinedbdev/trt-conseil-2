@@ -126,7 +126,6 @@ class JobOffer
     public function removeApply(Apply $apply): static
     {
         if ($this->Applies->removeElement($apply)) {
-            // set the owning side to null (unless already changed)
             if ($apply->getJobOffer() === $this) {
                 $apply->setJobOffer(null);
             }

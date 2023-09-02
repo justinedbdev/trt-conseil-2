@@ -109,7 +109,6 @@ class Recruiter
     public function removeJobOffer(jobOffer $jobOffer): static
     {
         if ($this->jobOffers->removeElement($jobOffer)) {
-            // set the owning side to null (unless already changed)
             if ($jobOffer->getRecruiter() === $this) {
                 $jobOffer->setRecruiter(null);
             }

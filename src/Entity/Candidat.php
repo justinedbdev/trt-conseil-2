@@ -124,7 +124,6 @@ class Candidat
     public function removeApply(Apply $apply): static
     {
         if ($this->applies->removeElement($apply)) {
-            // set the owning side to null (unless already changed)
             if ($apply->getCandidat() === $this) {
                 $apply->setCandidat(null);
             }

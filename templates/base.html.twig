@@ -15,11 +15,12 @@
 			<link href="https://cdn.jsdelivr.net/npm/bootswatch@5.2.3/dist/pulse/bootstrap.min.css" rel="stylesheet">
 		{% endblock %}
 
-		{% block javascripts %}{% endblock %}
 	</head>
 	<body>
-		{% block body %}
+		{% block header %}
 			{% include "_partials/_flash.html.twig" %}
 		{% endblock %}
+		{% block body %}{% endblock %}
+		{% block javascripts %}{% endblock %}
 	</body>
 </html>

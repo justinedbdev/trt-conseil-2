@@ -13,8 +13,8 @@ class Apply
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $isValidated = null;
+    #[ORM\Column(type: 'boolean')]
+    private ?bool $isValidated = false;
 
     #[ORM\ManyToOne(targetEntity: Candidat::class, inversedBy: 'applies')]
     #[ORM\JoinColumn(nullable: false)]

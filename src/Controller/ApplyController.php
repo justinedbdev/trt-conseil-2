@@ -37,7 +37,7 @@ class ApplyController extends AbstractController
 
     #[IsGranted('ROLE_CANDIDAT')]
     #[Route('/postuler/{id}', name: 'apply')]
-    public function test(CandidatRepository $candidatRepo, JobOfferRepository $jobOfferRepo, int $id): Response
+    public function apply(CandidatRepository $candidatRepo, JobOfferRepository $jobOfferRepo, int $id): Response
     {
         /**
          * @var User $user
